@@ -1,23 +1,72 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import {nanoid} from 'nanoid';
+import Noteslist from "./Components/NotesList";
+import Search from "./Components/Search";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+const App = () => {
+    const [notes,setNotes] = useState([
+      {
+      id : nanoid(),
+      text: "This is my first note",
+      date: "13/08/2020",
+
+    },
+    {
+      id : nanoid(),
+      text: "This is my second note",
+      date: "14/08/2020",
+
+    },
+    {
+      id : nanoid(),
+      text: "This is my third note",
+      date: "15/08/2020",
+
+    },
+    {
+      id : nanoid(),
+      text: "This is my fourth note",
+      date: "16/08/2020",
+
+    },
+  ]);
+
+  const [searchText, setsearchText] = useState("")
+
+
+
+  const addNote  = (text) => {
+    const date = new Date();
+
+    const newNote = {
+      id : nanoid(),
+      text : text,
+      date: date.toLocaleDateString()
+
+    };
+
+    const newNotes = [...notes,newNote];
+    setNotes(newNotes);
+
+  }
+
+  const deleteNote = (id) => {
+    const newNotes = notes.filter((note) => note.id !== id );
+    setNotes(newNotes);
+
+  }
+
+
+
+  return(
+    <div className = 'container'>
+      <Search handleSearchNote = {setsearchText}/>
+
+      <Noteslist notes = {notes.filter((note) =>
+        note.text.toLowerCase().includes(searchText))} 
+      handleAddNote={addNote} 
+      handleDeleteNote = {deleteNote}
+      />
     </div>
   );
 }
